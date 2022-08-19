@@ -7,13 +7,19 @@ package practicas_2022;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import static java.lang.String.valueOf;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,10 +31,14 @@ public class ventana extends JFrame{
     JPanel panel_control = new JPanel();
     JPanel panel_crear_usu = new JPanel();
     int control = 2;
+    cliente clientes[] = new cliente[100];
+    int control_cli = 0;
+    JPanel panel_control_cli = new JPanel();
    
     public ventana(){
         objetos();
         crear_admin();
+        crear_cli();
     }
     
     public void crear_admin(){
@@ -42,10 +52,25 @@ public class ventana extends JFrame{
       usu_sistema[1].nom = "sofia";
       usu_sistema[1].contra = "789";
     }
+    public void crear_cli(){
+        clientes[0] = new cliente();
+        clientes[0].nom = "cli_1";
+        clientes[0].edad = 22;
+        clientes[0].genero = 'M';
+        clientes[0].nit = 150;
+        
+        clientes[1] = new cliente();
+        clientes[1].nom = "cli_2";
+        clientes[1].edad = 22;
+        clientes[1].genero = 'M';
+        clientes[1].nit = 300;
+    }
     
     public void objetos(){
         this.getContentPane().add(panel_inicio_sesion);
         panel_inicio_sesion.setLayout(null);
+        this.setSize(500, 400);
+        this.setTitle("Sistema administrativo de clientes y recursos");
         
         JLabel lbl_login = new JLabel("Login");
         lbl_login.setBounds(20, 7, 100, 15);
@@ -102,6 +127,7 @@ public class ventana extends JFrame{
                 if(usu_sistema[i].nom_usuario.equals(nom_usu) && usu_sistema[i].contra.equals(contra)){
                     JOptionPane.showMessageDialog(null, "Bienvenido al sistema " + nom_usu);
                     encontrado = true;
+                    panel_control();
                     break;
                 }else{
                     encontrado = false;
@@ -116,20 +142,28 @@ public class ventana extends JFrame{
     public void panel_control(){
         this.getContentPane().add(panel_control);
         panel_control.setLayout(null);
-        this.setSize(700, 600);
+        this.setSize(500, 400);
         this.setTitle("Control Principal");
         panel_inicio_sesion.setVisible(false);
                 
         JButton btn_admin_cli = new JButton("Administración de Clientes");
-        btn_admin_cli.setBounds(150, 10, 250, 25);
+        btn_admin_cli.setBounds(100, 10, 250, 25);
         panel_control.add(btn_admin_cli);
+        ActionListener admin_cli = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                panel_control_cli();
+                panel_control_cli.setVisible(true);
+            }
+        };
+        btn_admin_cli.addActionListener(admin_cli);
         
         JButton btn_admin_pro = new JButton("Administración de Productos");
-        btn_admin_pro.setBounds(150, 80, 250, 25);
+        btn_admin_pro.setBounds(100, 80, 250, 25);
         panel_control.add(btn_admin_pro);
         
         JButton btn_rep = new JButton("Reportes");
-        btn_rep.setBounds(150, 10, 250, 25);
+        btn_rep.setBounds(100, 120, 250, 25);
         panel_control.add(btn_rep);
        
     }
@@ -235,5 +269,43 @@ public class ventana extends JFrame{
         }else{
             JOptionPane.showMessageDialog(null, "No se puede registrar más usuarios");
         }    
+    }
+    public void panel_control_cli(){
+        this.getContentPane().add(panel_control_cli);
+        panel_control_cli.setLayout(null);
+        this.setSize(700, 500);
+        this.setTitle("Administración de clientes");
+        panel_control.setVisible(false);
+        
+        DefaultTableModel datos_tabla = new DefaultTableModel();
+        datos_tabla.addColumn("Nombre");
+        datos_tabla.addColumn("Edad");
+        datos_tabla.addColumn("Género");
+        datos_tabla.addColumn("NIT");
+        
+        for(int i = 0; i<10; i++){
+            if(clientes[i] != null){
+                String fila[] = {clientes[i].nom, String.valueOf(clientes[i].edad), String.valueOf(clientes[i].genero), String.valueOf(clientes[i].nit)};
+                datos_tabla.addRow(fila);
+            }
+        }    
+        JTable tabla_cli = new JTable(datos_tabla);
+        JScrollPane barra_des = new JScrollPane(tabla_cli);
+        barra_des.setBounds(10, 10, 300, 300);
+        panel_control_cli.add(barra_des);
+        
+        JButton btn_cargar_archivo = new JButton("Cargar archivo CSV");
+        btn_cargar_archivo.setBounds(350, 10, 200, 25);
+        panel_control_cli.add(btn_cargar_archivo);
+        ActionListener buscar_archivo = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                File archivo_selec;
+                JFileChooser ventana_archivo = new JFileChooser();
+                ventana_archivo.showOpenDialog(null);
+                archivo_selec = ventana_archivo.getSelectedFile();
+            }
+        };
+        btn_cargar_archivo.addActionListener(buscar_archivo);
     }
 }
