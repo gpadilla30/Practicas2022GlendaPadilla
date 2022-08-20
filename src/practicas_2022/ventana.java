@@ -93,7 +93,7 @@ public class ventana extends JFrame{
         panel_inicio_sesion.add(txt_contra);
         
         JButton btn_ingresar = new JButton("Ingresar");
-        btn_ingresar.setBounds(120, 145, 180, 35);
+        btn_ingresar.setBounds(400, 40, 180, 35);
         panel_inicio_sesion.add(btn_ingresar);
         ActionListener ingresar = new ActionListener(){
             @Override
@@ -108,7 +108,7 @@ public class ventana extends JFrame{
         btn_ingresar.addActionListener(ingresar);
         
         JButton btn_crear_usu = new JButton("Registrar");
-        btn_crear_usu.setBounds(120, 185, 180, 35);
+        btn_crear_usu.setBounds(400, 85, 180, 35);
         panel_inicio_sesion.add(btn_crear_usu);
         ActionListener crear_usu = new ActionListener(){
             @Override
@@ -142,12 +142,12 @@ public class ventana extends JFrame{
     public void panel_control(){
         this.getContentPane().add(panel_control);
         panel_control.setLayout(null);
-        this.setSize(500, 400);
+        this.setSize(450, 200);
         this.setTitle("Control Principal");
         panel_inicio_sesion.setVisible(false);
                 
         JButton btn_admin_cli = new JButton("Administración de Clientes");
-        btn_admin_cli.setBounds(100, 10, 250, 25);
+        btn_admin_cli.setBounds(90, 20, 250, 25);
         panel_control.add(btn_admin_cli);
         ActionListener admin_cli = new ActionListener(){
             @Override
@@ -159,11 +159,11 @@ public class ventana extends JFrame{
         btn_admin_cli.addActionListener(admin_cli);
         
         JButton btn_admin_pro = new JButton("Administración de Productos");
-        btn_admin_pro.setBounds(100, 80, 250, 25);
+        btn_admin_pro.setBounds(90, 60, 250, 25);
         panel_control.add(btn_admin_pro);
         
         JButton btn_rep = new JButton("Reportes");
-        btn_rep.setBounds(100, 120, 250, 25);
+        btn_rep.setBounds(90, 100, 250, 25);
         panel_control.add(btn_rep);
        
     }
@@ -171,7 +171,7 @@ public class ventana extends JFrame{
     public void crear_usu(){
         this.getContentPane().add(panel_crear_usu);
         panel_crear_usu.setLayout(null);
-        this.setSize(500, 450);
+        this.setSize(650, 300);
         this.setTitle("Registro de nuevo usuario");
         panel_inicio_sesion.setVisible(false);
     
@@ -212,7 +212,7 @@ public class ventana extends JFrame{
         panel_crear_usu.add(txt_confi_contra);
         
         JButton btn_registrar = new JButton("Registrar");
-        btn_registrar.setBounds(130, 280, 200, 35);
+        btn_registrar.setBounds(400, 80, 200, 35);
         panel_crear_usu.add(btn_registrar);
         ActionListener registro = new ActionListener(){
             @Override
@@ -236,19 +236,24 @@ public class ventana extends JFrame{
         btn_registrar.addActionListener(registro);
         
         JButton btn_inicio = new JButton("Inicio");
-        btn_inicio.setBounds(130, 350, 200, 35);
+        btn_inicio.setBounds(400, 150, 200, 35);
         panel_crear_usu.add(btn_inicio);
         ActionListener volver_inicio = new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
                 panel_inicio_sesion.setVisible(true);
                 panel_crear_usu.setVisible(false);
-               
+               volver_inicio();
             }
         };
         btn_inicio.addActionListener(volver_inicio);
     }
-       
+    
+    public void volver_inicio(){
+        this.setTitle("Sistema administrativo de clientes y recursos");
+        this.setSize(650, 200);
+    }
+    
     public void guardar_usu(String nom_usu, String nom, String contra){
         int posicion = 0;
         if(control < 10){

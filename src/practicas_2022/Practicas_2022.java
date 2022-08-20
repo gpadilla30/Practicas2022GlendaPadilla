@@ -20,7 +20,7 @@ public class Practicas_2022 {
       ventana marco = new ventana();
       marco.setVisible(true);
       marco.setTitle("Sistema administrativo de clientes y recursos");
-      marco.setSize(500,400);
+      marco.setSize(650,200);
       marco.setLocationRelativeTo(null);
       marco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
