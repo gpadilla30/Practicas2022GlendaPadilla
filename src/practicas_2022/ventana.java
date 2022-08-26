@@ -7,7 +7,10 @@ package practicas_2022;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import static java.lang.String.valueOf;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -34,6 +37,7 @@ public class ventana extends JFrame{
     cliente clientes[] = new cliente[100];
     int control_cli = 0;
     JPanel panel_control_cli = new JPanel();
+    int control_clientes = 2;
    
     public ventana(){
         objetos();
@@ -309,8 +313,46 @@ public class ventana extends JFrame{
                 JFileChooser ventana_archivo = new JFileChooser();
                 ventana_archivo.showOpenDialog(null);
                 archivo_selec = ventana_archivo.getSelectedFile();
+                System.out.println("La ubicación del archivo seleccionado es " + archivo_selec.getPath());
+                leer_archivo(archivo_selec.getPath());
             }
         };
         btn_cargar_archivo.addActionListener(buscar_archivo);
+    }
+    
+    public void leer_archivo(String ruta){
+        try{
+            BufferedReader archivo_temp = new BufferedReader(new FileReader(ruta));
+            String linea_leida = "";
+            while(linea_leida != null){
+                linea_leida = archivo_temp.readLine();
+                if(linea_leida != null){
+                    String datos_separados[] = linea_leida.split(",");
+                    
+                    int posicion = 0;
+                    if (control_clientes < 100) {
+                        for (int i = 0; i < 99; i++) {
+                            if (clientes[i] == null) {
+                                posicion = i;
+                                break;
+                            }
+                        }
+                        clientes[posicion] = new cliente();
+                        clientes[posicion].nom = datos_separados[0];
+                        clientes[posicion].edad = Integer.parseInt(datos_separados[1]);
+                        clientes[posicion].genero = datos_separados[2].charAt(0);
+                        clientes[posicion].nit = Integer.parseInt(datos_separados[3]);
+                        control_clientes++;
+                        JOptionPane.showMessageDialog(null, "Cliente registrado exitosamente " + control_clientes);
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se puede registrar más clientes");
+                    }
+                }
+            }
+            archivo_temp.close();
+        }catch(IOException error){
+            JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
+        }
     }
 }
