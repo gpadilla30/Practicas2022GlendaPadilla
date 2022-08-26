@@ -23,20 +23,25 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 /**
  *
  * @author sofia
  */
 public class ventana extends JFrame{
     usuario usu_sistema [] = new usuario[10];
-    JPanel panel_inicio_sesion = new JPanel();
-    JPanel panel_control = new JPanel();
-    JPanel panel_crear_usu = new JPanel();
+    JPanel panel_inicio_sesion;
+    JPanel panel_control;
+    JPanel panel_crear_usu;
     int control = 2;
     cliente clientes[] = new cliente[100];
     int control_cli = 0;
-    JPanel panel_control_cli = new JPanel();
+    JPanel panel_control_cli;
     int control_clientes = 2;
    
     public ventana(){
@@ -71,6 +76,7 @@ public class ventana extends JFrame{
     }
     
     public void objetos(){
+        panel_inicio_sesion = new JPanel();
         this.getContentPane().add(panel_inicio_sesion);
         panel_inicio_sesion.setLayout(null);
         this.setSize(500, 400);
@@ -144,6 +150,7 @@ public class ventana extends JFrame{
     }
     
     public void panel_control(){
+        panel_control = new JPanel();
         this.getContentPane().add(panel_control);
         panel_control.setLayout(null);
         this.setSize(450, 200);
@@ -173,6 +180,7 @@ public class ventana extends JFrame{
     }
     
     public void crear_usu(){
+        panel_crear_usu = new JPanel();
         this.getContentPane().add(panel_crear_usu);
         panel_crear_usu.setLayout(null);
         this.setSize(650, 300);
@@ -280,9 +288,10 @@ public class ventana extends JFrame{
         }    
     }
     public void panel_control_cli(){
+        panel_control_cli = new JPanel();
         this.getContentPane().add(panel_control_cli);
         panel_control_cli.setLayout(null);
-        this.setSize(700, 500);
+        this.setSize(700, 600);
         this.setTitle("Administración de clientes");
         panel_control.setVisible(false);
         
@@ -300,8 +309,17 @@ public class ventana extends JFrame{
         }    
         JTable tabla_cli = new JTable(datos_tabla);
         JScrollPane barra_des = new JScrollPane(tabla_cli);
-        barra_des.setBounds(10, 10, 300, 300);
+        barra_des.setBounds(10, 10, 300, 200);
         panel_control_cli.add(barra_des);
+        
+        DefaultPieDataset datos = new DefaultPieDataset();
+        datos.setValue("Masculino", totalH());
+        datos.setValue("Femenino", totalM());
+        
+        JFreeChart grafico_circular = ChartFactory.createPieChart("Géneros en el sistema", datos);
+        ChartPanel panel_circular = new ChartPanel(grafico_circular);
+        panel_circular.setBounds(10, 220, 300, 300);
+        panel_control_cli.add(panel_circular);
         
         JButton btn_cargar_archivo = new JButton("Cargar archivo CSV");
         btn_cargar_archivo.setBounds(350, 10, 200, 25);
@@ -315,9 +333,33 @@ public class ventana extends JFrame{
                 archivo_selec = ventana_archivo.getSelectedFile();
                 System.out.println("La ubicación del archivo seleccionado es " + archivo_selec.getPath());
                 leer_archivo(archivo_selec.getPath());
+                panel_control_cli.setVisible(false);
+                panel_control_cli();
             }
         };
         btn_cargar_archivo.addActionListener(buscar_archivo);
+    }
+    public int totalH(){
+        int total = 0;
+        for(int i = 0; i<100; i++){
+            if(clientes[i] != null){
+                if(clientes[i].genero == 'M'){
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+    public int totalM(){
+        int total = 0;
+        for(int i = 0; i<100; i++){
+            if(clientes[i] != null){
+                if(clientes[i].genero == 'F'){
+                    total++;
+                }
+            }
+        }
+        return total;
     }
     
     public void leer_archivo(String ruta){
@@ -343,13 +385,12 @@ public class ventana extends JFrame{
                         clientes[posicion].genero = datos_separados[2].charAt(0);
                         clientes[posicion].nit = Integer.parseInt(datos_separados[3]);
                         control_clientes++;
-                        JOptionPane.showMessageDialog(null, "Cliente registrado exitosamente " + control_clientes);
-
                     } else {
                         JOptionPane.showMessageDialog(null, "No se puede registrar más clientes");
                     }
                 }
             }
+            JOptionPane.showMessageDialog(null, "Clientes registrados exitosamente, total de clientes " + control_clientes);
             archivo_temp.close();
         }catch(IOException error){
             JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
