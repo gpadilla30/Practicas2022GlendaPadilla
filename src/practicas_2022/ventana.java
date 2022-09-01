@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import static java.lang.String.valueOf;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -48,8 +49,7 @@ public class ventana extends JFrame{
         objetos();
         crear_admin();
         crear_cli();
-    }
-    
+    }    
     public void crear_admin(){
       usu_sistema[0] = new usuario();
       usu_sistema[0].nom_usuario = "admin";
@@ -73,8 +73,7 @@ public class ventana extends JFrame{
         clientes[1].edad = 22;
         clientes[1].genero = 'M';
         clientes[1].nit = 300;
-    }
-    
+    }    
     public void objetos(){
         panel_inicio_sesion = new JPanel();
         this.getContentPane().add(panel_inicio_sesion);
@@ -128,8 +127,7 @@ public class ventana extends JFrame{
             }
         };
         btn_crear_usu.addActionListener(crear_usu);
-    }
-    
+    }    
     public void recorrer_usu(String nom_usu, String contra){
         boolean encontrado = false;
         for(int i = 0; i<10; i++){
@@ -147,8 +145,7 @@ public class ventana extends JFrame{
         if(encontrado == false){
             JOptionPane.showMessageDialog(null, "Datos incorrectos");
         }
-    }
-    
+    }    
     public void panel_control(){
         panel_control = new JPanel();
         this.getContentPane().add(panel_control);
@@ -177,8 +174,7 @@ public class ventana extends JFrame{
         btn_rep.setBounds(90, 100, 250, 25);
         panel_control.add(btn_rep);
        
-    }
-    
+    }    
     public void crear_usu(){
         panel_crear_usu = new JPanel();
         this.getContentPane().add(panel_crear_usu);
@@ -259,13 +255,11 @@ public class ventana extends JFrame{
             }
         };
         btn_inicio.addActionListener(volver_inicio);
-    }
-    
+    }    
     public void volver_inicio(){
         this.setTitle("Sistema administrativo de clientes y recursos");
         this.setSize(650, 200);
-    }
-    
+    }    
     public void guardar_usu(String nom_usu, String nom, String contra){
         int posicion = 0;
         if(control < 10){
@@ -321,6 +315,19 @@ public class ventana extends JFrame{
         panel_circular.setBounds(10, 220, 300, 300);
         panel_control_cli.add(panel_circular);
         
+        //System.out.println("Total de 18 a 30 " + rango18a30());
+        //System.out.println("Total de 31 a 45 " + rango31a45());
+        //System.out.println("Total de 46 o más " + rango46mas());
+        
+        DefaultCategoryDataset datos2 = new DefaultCategoryDataset();
+        datos2.addValue(rango18a30(), "18-30", "Edad");
+        datos2.addValue(rango31a45(), "31-45", "Edad");
+        datos2.addValue(rango46mas(), "Mayor a 45", "Edad");
+        JFreeChart grafico_columnas = ChartFactory.createBarChart("Rango de edades", "Edad", "Escala", datos2, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel panel_columnas = new ChartPanel(grafico_columnas);
+        panel_columnas.setBounds(350, 220, 300, 300);
+        panel_control_cli.add(panel_columnas);
+                
         JButton btn_cargar_archivo = new JButton("Cargar archivo CSV");
         btn_cargar_archivo.setBounds(350, 10, 200, 25);
         panel_control_cli.add(btn_cargar_archivo);
@@ -338,6 +345,54 @@ public class ventana extends JFrame{
             }
         };
         btn_cargar_archivo.addActionListener(buscar_archivo);
+        
+        JButton btn_reporte = new JButton("Crear reporte HTML");
+        btn_reporte.setBounds(350, 50, 200, 25);
+        panel_control_cli.add(btn_reporte);
+        ActionListener crearHTML = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                crear_reporte();
+            }
+        };
+        btn_reporte.addActionListener(crearHTML);
+    }
+    public void crear_reporte(){
+        try{
+             PrintWriter css = new PrintWriter("reportes/style.css","UTF-8");
+             css.println("h1{font-color:blue}");
+             css.close();
+            
+            PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
+            escribir.println("<!doctype html>");
+            escribir.println("<html>");
+            escribir.println("<head>");
+            escribir.println("<title>Reporte del sistema</title>");
+            escribir.println("<link rel='stylesheet' href='reportes/style.css'>");
+            escribir.println("</head>");
+            escribir.println("<body>");
+            escribir.println("<h1>Listado de clientes en el sistema</h1>");
+            escribir.println("<br>");
+            escribir.println("<table id='table'>");
+            escribir.println("<tr>");
+            escribir.println("<td>NIT</td> <td>Nombre</td> <td>Edad</td> <td>Género</td>");
+            escribir.println("</tr>");
+            
+            for(int i=0; i<99; i++){
+                if(clientes[i] != null){
+                    escribir.println("<tr>");
+                    escribir.println("<td>" + clientes[i].nit + "</td><td>" + clientes[i].nom + "</td><td>" + clientes[i].edad + "</td><td>" + clientes[i].genero + "</td>");
+                    escribir.println("</tr>");
+                }
+            }
+            escribir.println("</table>");
+            escribir.println("</body>");
+            escribir.println("</html>");
+            escribir.close();
+            JOptionPane.showMessageDialog(null, "Reporte creado exitosamente");
+        }catch(IOException error){
+            JOptionPane.showMessageDialog(null, "No se pudo crear el reporte");
+        }
     }
     public int totalH(){
         int total = 0;
@@ -360,8 +415,40 @@ public class ventana extends JFrame{
             }
         }
         return total;
+    }    
+    public int rango18a30(){
+        int total = 0;
+        for(int i = 0; i<100; i++){
+            if(clientes[i] != null){
+                if(clientes[i].edad >= 18 && clientes[i].edad <= 30){
+                    total++;
+                }
+            }
+        }
+        return total;
     }
-    
+    public int rango31a45(){
+        int total = 0;
+        for(int i = 0; i<100; i++){
+            if(clientes[i] != null){
+                if(clientes[i].edad >= 31 && clientes[i].edad <= 45){
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+    public int rango46mas(){
+        int total = 0;
+        for(int i = 0; i<100; i++){
+            if(clientes[i] != null){
+                if(clientes[i].edad >= 46){
+                    total++;
+                }
+            }
+        }
+        return total;
+    }    
     public void leer_archivo(String ruta){
         try{
             BufferedReader archivo_temp = new BufferedReader(new FileReader(ruta));
