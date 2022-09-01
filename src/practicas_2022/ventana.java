@@ -145,36 +145,7 @@ public class ventana extends JFrame{
         if(encontrado == false){
             JOptionPane.showMessageDialog(null, "Datos incorrectos");
         }
-    }    
-    public void panel_control(){
-        panel_control = new JPanel();
-        this.getContentPane().add(panel_control);
-        panel_control.setLayout(null);
-        this.setSize(450, 200);
-        this.setTitle("Control Principal");
-        panel_inicio_sesion.setVisible(false);
-                
-        JButton btn_admin_cli = new JButton("Administración de Clientes");
-        btn_admin_cli.setBounds(90, 20, 250, 25);
-        panel_control.add(btn_admin_cli);
-        ActionListener admin_cli = new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                panel_control_cli();
-                panel_control_cli.setVisible(true);
-            }
-        };
-        btn_admin_cli.addActionListener(admin_cli);
-        
-        JButton btn_admin_pro = new JButton("Administración de Productos");
-        btn_admin_pro.setBounds(90, 60, 250, 25);
-        panel_control.add(btn_admin_pro);
-        
-        JButton btn_rep = new JButton("Reportes");
-        btn_rep.setBounds(90, 100, 250, 25);
-        panel_control.add(btn_rep);
-       
-    }    
+    }        
     public void crear_usu(){
         panel_crear_usu = new JPanel();
         this.getContentPane().add(panel_crear_usu);
@@ -281,6 +252,30 @@ public class ventana extends JFrame{
             JOptionPane.showMessageDialog(null, "No se puede registrar más usuarios");
         }    
     }
+    public void panel_control(){
+        panel_control = new JPanel();
+        this.getContentPane().add(panel_control);
+        panel_control.setLayout(null);
+        this.setSize(450, 200);
+        this.setTitle("Control Principal");
+        panel_inicio_sesion.setVisible(false);
+                
+        JButton btn_admin_cli = new JButton("Administración de Clientes");
+        btn_admin_cli.setBounds(90, 20, 250, 25);
+        panel_control.add(btn_admin_cli);
+        ActionListener admin_cli = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                panel_control_cli();
+                panel_control_cli.setVisible(true);
+            }
+        };
+        btn_admin_cli.addActionListener(admin_cli);
+        
+        JButton btn_admin_pro = new JButton("Administración de Productos");
+        btn_admin_pro.setBounds(90, 80, 250, 25);
+        panel_control.add(btn_admin_pro);   
+    }
     public void panel_control_cli(){
         panel_control_cli = new JPanel();
         this.getContentPane().add(panel_control_cli);
@@ -314,11 +309,7 @@ public class ventana extends JFrame{
         ChartPanel panel_circular = new ChartPanel(grafico_circular);
         panel_circular.setBounds(10, 220, 300, 300);
         panel_control_cli.add(panel_circular);
-        
-        //System.out.println("Total de 18 a 30 " + rango18a30());
-        //System.out.println("Total de 31 a 45 " + rango31a45());
-        //System.out.println("Total de 46 o más " + rango46mas());
-        
+     
         DefaultCategoryDataset datos2 = new DefaultCategoryDataset();
         datos2.addValue(rango18a30(), "18-30", "Edad");
         datos2.addValue(rango31a45(), "31-45", "Edad");
@@ -352,47 +343,27 @@ public class ventana extends JFrame{
         ActionListener crearHTML = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                crear_reporte();
+               crear_reporte();
             }
         };
         btn_reporte.addActionListener(crearHTML);
-    }
-    public void crear_reporte(){
-        try{
-             PrintWriter css = new PrintWriter("reportes/style.css","UTF-8");
-             css.println("h1{font-color:blue}");
-             css.close();
-            
-            PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
-            escribir.println("<!doctype html>");
-            escribir.println("<html>");
-            escribir.println("<head>");
-            escribir.println("<title>Reporte del sistema</title>");
-            escribir.println("<link rel='stylesheet' href='reportes/style.css'>");
-            escribir.println("</head>");
-            escribir.println("<body>");
-            escribir.println("<h1>Listado de clientes en el sistema</h1>");
-            escribir.println("<br>");
-            escribir.println("<table id='table'>");
-            escribir.println("<tr>");
-            escribir.println("<td>NIT</td> <td>Nombre</td> <td>Edad</td> <td>Género</td>");
-            escribir.println("</tr>");
-            
-            for(int i=0; i<99; i++){
-                if(clientes[i] != null){
-                    escribir.println("<tr>");
-                    escribir.println("<td>" + clientes[i].nit + "</td><td>" + clientes[i].nom + "</td><td>" + clientes[i].edad + "</td><td>" + clientes[i].genero + "</td>");
-                    escribir.println("</tr>");
-                }
+        
+        JButton btn_inicio = new JButton("Menú Principal");
+        btn_inicio.setBounds(350, 90, 200, 25);
+        panel_control_cli.add(btn_inicio);
+        ActionListener volver_inicio = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                panel_control.setVisible(true);
+                panel_control_cli.setVisible(false);
+               volver_menu();
             }
-            escribir.println("</table>");
-            escribir.println("</body>");
-            escribir.println("</html>");
-            escribir.close();
-            JOptionPane.showMessageDialog(null, "Reporte creado exitosamente");
-        }catch(IOException error){
-            JOptionPane.showMessageDialog(null, "No se pudo crear el reporte");
-        }
+        };
+        btn_inicio.addActionListener(volver_inicio);
+    }
+    public void volver_menu(){
+        this.setTitle("Control Principal");
+        this.setSize(450, 200);
     }
     public int totalH(){
         int total = 0;
@@ -448,7 +419,7 @@ public class ventana extends JFrame{
             }
         }
         return total;
-    }    
+    }
     public void leer_archivo(String ruta){
         try{
             BufferedReader archivo_temp = new BufferedReader(new FileReader(ruta));
@@ -483,4 +454,60 @@ public class ventana extends JFrame{
             JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
         }
     }
+    public void ordenar(){
+        cliente auxiliar;
+        for(int i=0; i<99; i++){
+            for(int j=0; j<99; j++){
+                if(clientes[j+1] == null){
+                    break;
+                }else{
+                    if(clientes[j].edad > clientes[j].edad){
+                        auxiliar = clientes[j+1];
+                        clientes[j+1] = clientes[j];
+                        clientes[j] = auxiliar;
+                    }
+                }
+            }
+        }
+    }  
+    public void crear_reporte(){
+        try{
+            ordenar(); 
+            PrintWriter css = new PrintWriter("reportes/style.css","UTF-8");
+             css.println("h1{font-color:blue}");
+             css.close();
+            
+            PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
+            escribir.println("<!doctype html>");
+            escribir.println("<html>");
+            escribir.println("<head>");
+            escribir.println("<title>Reporte del sistema</title>");
+            escribir.println("<link rel='stylesheet' href='reportes/style.css'>");
+            escribir.println("</head>");
+            escribir.println("<body>");
+            escribir.println("<h1>Listado de clientes en el sistema</h1>");
+            escribir.println("<br>");
+            escribir.println("<table border=1>");
+            escribir.println("<tr>");
+            escribir.println("<td>NIT</td> <td>Nombre</td> <td>Edad</td> <td>Género</td>");
+            escribir.println("</tr>");
+            
+            for(int i=0; i<99; i++){
+                if(clientes[i] != null){
+                    escribir.println("<tr>");
+                    escribir.println("<td>" + clientes[i].nit + "</td><td>" + clientes[i].nom + "</td><td>" + clientes[i].edad + "</td><td>" + clientes[i].genero + "</td>");
+                    escribir.println("</tr>");
+                }
+            }
+            escribir.println("</table>");
+            escribir.println("</body>");
+            escribir.println("</html>");
+            escribir.close();
+            JOptionPane.showMessageDialog(null, "Reporte creado exitosamente");
+        }catch(IOException error){
+            JOptionPane.showMessageDialog(null, "No se pudo crear el reporte");
+        }
+    }
+     
+    
 }
