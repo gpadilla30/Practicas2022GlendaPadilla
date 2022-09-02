@@ -323,7 +323,7 @@ public class ventana extends JFrame{
         }    
         JTable tabla_cli = new JTable(datos_tabla);
         JScrollPane barra_des = new JScrollPane(tabla_cli);
-        barra_des.setBounds(10, 10, 300, 200);
+        barra_des.setBounds(10, 10, 300, 150);
         panel_control_cli.add(barra_des);
         
         DefaultPieDataset datos = new DefaultPieDataset();
@@ -354,10 +354,13 @@ public class ventana extends JFrame{
                 JFileChooser ventana_archivo = new JFileChooser();
                 ventana_archivo.showOpenDialog(null);
                 archivo_selec = ventana_archivo.getSelectedFile();
-                System.out.println("La ubicación del archivo seleccionado es " + archivo_selec.getPath());
-                leer_archivo(archivo_selec.getPath());
-                panel_control_cli.setVisible(false);
-                panel_control_cli();
+                if(archivo_selec == null){
+                    JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo");
+                }else{
+                   leer_archivo(archivo_selec.getPath());
+                    panel_control_cli.setVisible(false);
+                    panel_control_cli(); 
+                }
             }
         };
         btn_cargar_archivo.addActionListener(buscar_archivo);
@@ -486,7 +489,7 @@ public class ventana extends JFrame{
                 if(clientes[j+1] == null){
                     break;
                 }else{
-                    if(clientes[j].edad > clientes[j].edad){
+                    if(clientes[j].edad > clientes[j+1].edad){
                         auxiliar = clientes[j+1];
                         clientes[j+1] = clientes[j];
                         clientes[j] = auxiliar;
@@ -497,24 +500,25 @@ public class ventana extends JFrame{
     }  
     public void crear_reporte(){
         try{
-            String nom_usu;
-            nom_usu = JOptionPane.showInputDialog(null, "Ingrese Nombre de usuario");
-          
             ordenar(); 
-            PrintWriter css = new PrintWriter("reportes/style.css","UTF-8");
-            css.println("h1{font-color:blue}");
-            css.close();
+            PrintWriter escribir_css = new PrintWriter("reportes/estilo.css","UTF-8");
+            escribir_css.print("html {   font-size: 20px; font-family: 'Open Sans', sans-serif; }");
+            escribir_css.print("h1 { font-size: 60px; text-align: center; }");
+            escribir_css.print("p, li {   font-size: 16px;   line-height: 2;   letter-spacing: 1px; }");
+            escribir_css.print("table { table-layout: fixed;   width:250px;}   td{border: 1px solid black; width: 190px;  word-wrap: break-word}");
+            escribir_css.print("html { background-color: #00539F; }");
+            escribir_css.print("body { width: 970px; margin: 0 auto; background-color: #FF9500; padding: 0 20px 20px 20px; border: 5px solid black; }");
+            escribir_css.print("h1 { margin: 0; padding: 20px 0; color: #00539F; text-shadow: 3px 3px 1px black; }");
+            escribir_css.close();
             
             PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
             escribir.println("<!doctype html>");
             escribir.println("<html>");
             escribir.println("<head>");
             escribir.println("<title>Reporte del sistema</title>");
-            escribir.println("<link rel='stylesheet' href='reportes/style.css'>");
+            escribir.println("<link rel=\"stylesheet\" href=\"estilo.css\">");
             escribir.println("</head>");
             escribir.println("<body>");
-            escribir.println("<h3>Reporte creado por: </h3>" + nom_usu);
-            escribir.println("<br><br>");
             escribir.println("<h1>Listado de clientes en el sistema</h1>");
             escribir.println("<br>");
             escribir.println("<table border=1>");
@@ -561,7 +565,7 @@ public class ventana extends JFrame{
         }    
         JTable tabla_pro = new JTable(datos_tabla2);
         JScrollPane barra_des = new JScrollPane(tabla_pro);
-        barra_des.setBounds(10, 10, 300, 200);
+        barra_des.setBounds(10, 10, 300, 150);
         panel_control_pro.add(barra_des);
         
         DefaultPieDataset datos = new DefaultPieDataset();
@@ -592,10 +596,13 @@ public class ventana extends JFrame{
                 JFileChooser ventana_archivo = new JFileChooser();
                 ventana_archivo.showOpenDialog(null);
                 archivo_selec = ventana_archivo.getSelectedFile();
-                System.out.println("La ubicación del archivo seleccionado es " + archivo_selec.getPath());
-                leer_archivo2(archivo_selec.getPath());
-                panel_control_pro.setVisible(false);
-                panel_control_pro();
+                if(archivo_selec == null){
+                    JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo");
+                }else{
+                    leer_archivo2(archivo_selec.getPath());
+                    panel_control_pro.setVisible(false);
+                    panel_control_pro();
+                }
             }
         };
         btn_cargar_archivo.addActionListener(buscar_archivo);
@@ -720,7 +727,7 @@ public class ventana extends JFrame{
                 if(productos[j+1] == null){
                     break;
                 }else{
-                    if(productos[j].precio > productos[j].precio){
+                    if(productos[j].precio > productos[j+1].precio){
                         auxiliar = productos[j+1];
                         productos[j+1] = productos[j];
                         productos[j] = auxiliar;
@@ -731,29 +738,31 @@ public class ventana extends JFrame{
     }  
     public void crear_reporte2(){
         try{
-            String nom_usu;
-            nom_usu = JOptionPane.showInputDialog(null, "Ingrese Nombre de usuario");
-          
             ordenar(); 
-            PrintWriter css = new PrintWriter("reportes/style.css","UTF-8");
-            css.println("h1{font-color:blue}");
-            css.close();
+            PrintWriter escribir_css = new PrintWriter("reportes/estilo.css","UTF-8");
+            escribir_css.print("html {   font-size: 20px; font-family: 'Open Sans', sans-serif; }");
+            escribir_css.print("h1 { font-size: 60px; text-align: center; }");
+            escribir_css.print("p, li {   font-size: 16px;   line-height: 2;   letter-spacing: 1px; }");
+            escribir_css.print("table { table-layout: fixed;   width:250px;}   td{border: 1px solid black; width: 190px;  word-wrap: break-word}");
+            escribir_css.print("html { background-color: #00539F; }");
+            escribir_css.print("body { width: 970px; margin: 0 auto; background-color: #FF9500; padding: 0 20px 20px 20px; border: 5px solid black; }");
+            escribir_css.print("h1 { margin: 0; padding: 20px 0; color: #00539F; text-shadow: 3px 3px 1px black; }");
+
+            escribir_css.close();
             
             PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
             escribir.println("<!doctype html>");
             escribir.println("<html>");
             escribir.println("<head>");
             escribir.println("<title>Reporte del sistema</title>");
-            escribir.println("<link rel='stylesheet' href='reportes/style.css'>");
+            escribir.println("<link rel=\"stylesheet\" href=\"estilo.css\">");
             escribir.println("</head>");
             escribir.println("<body>");
-            escribir.println("<h3>Reporte creado por: </h3>" + nom_usu);
-            escribir.println("<br><br>");
             escribir.println("<h1>Listado de productos en el sistema</h1>");
             escribir.println("<br>");
             escribir.println("<table border=1>");
             escribir.println("<tr>");
-            escribir.println("<td>NIT</td> <td>Categoría</td> <td>Nombre</td> <td>Precio</td> <td>Cantidad</td>");
+            escribir.println("<td>Categoría</td> <td>Nombre</td> <td>Precio</td> <td>Cantidad</td>");
             escribir.println("</tr>");
             
             for(int i=0; i<99; i++){
