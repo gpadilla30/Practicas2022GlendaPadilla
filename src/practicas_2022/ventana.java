@@ -501,7 +501,7 @@ public class ventana extends JFrame{
     public void crear_reporte(){
         try{
             ordenar(); 
-            PrintWriter escribir_css = new PrintWriter("reportes/estilo.css","UTF-8");
+            PrintWriter escribir_css = new PrintWriter("reportes clientes/estilo.css","UTF-8");
             escribir_css.print("html {   font-size: 20px; font-family: 'Open Sans', sans-serif; }");
             escribir_css.print("h1 { font-size: 60px; text-align: center; }");
             escribir_css.print("p, li {   font-size: 16px;   line-height: 2;   letter-spacing: 1px; }");
@@ -511,7 +511,7 @@ public class ventana extends JFrame{
             escribir_css.print("h1 { margin: 0; padding: 20px 0; color: #00539F; text-shadow: 3px 3px 1px black; }");
             escribir_css.close();
             
-            PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
+            PrintWriter escribir = new PrintWriter("reportes clientes/reporte.html","UTF-8");
             escribir.println("<!doctype html>");
             escribir.println("<html>");
             escribir.println("<head>");
@@ -738,8 +738,8 @@ public class ventana extends JFrame{
     }  
     public void crear_reporte2(){
         try{
-            ordenar(); 
-            PrintWriter escribir_css = new PrintWriter("reportes/estilo.css","UTF-8");
+            ordenar2(); 
+            PrintWriter escribir_css = new PrintWriter("reportes productos/estilo.css","UTF-8");
             escribir_css.print("html {   font-size: 20px; font-family: 'Open Sans', sans-serif; }");
             escribir_css.print("h1 { font-size: 60px; text-align: center; }");
             escribir_css.print("p, li {   font-size: 16px;   line-height: 2;   letter-spacing: 1px; }");
@@ -750,7 +750,7 @@ public class ventana extends JFrame{
 
             escribir_css.close();
             
-            PrintWriter escribir = new PrintWriter("reportes/reporte.html","UTF-8");
+            PrintWriter escribir = new PrintWriter("reportes productos/reporte.html","UTF-8");
             escribir.println("<!doctype html>");
             escribir.println("<html>");
             escribir.println("<head>");
